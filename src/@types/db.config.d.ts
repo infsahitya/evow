@@ -1,0 +1,3 @@
+interface DbConfigProps {
+  url: string;
+}
