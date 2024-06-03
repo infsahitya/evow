@@ -1,4 +1,4 @@
-export default () => ({
+export default (): AuthConfigProps => ({
   google: {
     clientID: process.env.GOOGLE_OAUTH_CLIENT_ID,
     callbackURL: process.env.GOOGLE_OAUTH_CALLBACK_URL,
