@@ -1,8 +1,8 @@
 import { registerAs } from "@nestjs/config";
-import { ConfigNamespaces } from "src/@types/config.namespace";
+import Configs from "src/constant/config.constant";
 
 export default registerAs(
-  ConfigNamespaces.DB,
+  Configs.Namespaces.DB,
   (): DbConfigProps => ({
     url: process.env.DATABASE_URL,
   }),
