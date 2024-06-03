@@ -1,8 +1,15 @@
 import { Module } from "@nestjs/common";
-import PrismaModule from "./shared/prisma/prisma.module";
-import LoggerModule from "./shared/logger/logger.module";
+import { ConfigModule } from "@nestjs/config";
+import PrismaModule from "./global/prisma/prisma.module";
+import LoggerModule from "./global/logger/logger.module";
 
 @Module({
-  imports: [PrismaModule, LoggerModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    LoggerModule,
+    PrismaModule,
+  ],
 })
-export class AppModule {}
+export default class AppModule {}
