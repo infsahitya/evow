@@ -1,8 +1,6 @@
-const Configs = {
-  Namespaces: {
+export default {
+  namespaces: {
     DB: "db",
     AUTH: "auth",
   },
 } as const;
-
-export default Configs;

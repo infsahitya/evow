@@ -1,7 +1,5 @@
-const Guards = {
-  Tokens: {
+export default {
+  tokens: {
     GOOGLE_OAUTH: "google",
   },
 } as const;
-
-export default Guards;
