@@ -5,3 +5,7 @@ interface AuthConfigProps {
     clientSecret: string;
   };
 }
+
+interface GoogleOAuthPayloadProps {
+  email: string;
+}
