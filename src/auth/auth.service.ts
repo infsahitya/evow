@@ -1,17 +1,21 @@
+import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { Injectable, Logger } from "@nestjs/common";
 import configConstant from "src/constant/config.constant";
+import LoggerService from "src/global/logger/logger.service";
 
 @Injectable()
 export default class AuthService {
   private configData: AuthConfigProps;
-  private readonly logger = new Logger(AuthService.name);
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly loggerService: LoggerService,
+  ) {
     this.configData = this.configService.get(configConstant.namespaces.AUTH);
   }
 
   trial() {
+    this.loggerService.log(`Config Data - ${JSON.stringify(this.configData)}`);
     return this.configData;
   }
 }
