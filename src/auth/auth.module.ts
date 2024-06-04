@@ -1,9 +1,9 @@
 import { Module } from "@nestjs/common";
+import { JwtModule } from "@nestjs/jwt";
 import AuthService from "./auth.service";
 import AuthController from "./auth.controller";
-import GoogleOAuthStrategy from "./strategy/google-oauth.strategy";
 import { PassportModule } from "@nestjs/passport";
-import { JwtModule } from "@nestjs/jwt";
+import GoogleOAuthStrategy from "./strategy/google-oauth.strategy";
 
 @Module({
   controllers: [AuthController],

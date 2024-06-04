@@ -2,8 +2,7 @@ import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export default class AuthService {
-  constructor() // private readonly jwtService: JwtService,
-  {}
+  constructor() {}
 
   private generateJwt(payload: GoogleOAuthPayloadProps) {
     // return this.jwtService.sign(payload);
