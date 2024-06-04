@@ -9,6 +9,7 @@ import LoggerModule from "./global/logger/logger.module";
 @Module({
   imports: [
     ConfigModule.forRoot({
+      cache: false,
       isGlobal: true,
       load: [dbConfig, authConfig],
     }),
