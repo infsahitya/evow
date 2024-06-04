@@ -1,8 +1,8 @@
 import { registerAs } from "@nestjs/config";
-import configConstant from "src/constant/config.constant";
+import { ConfigNamespaces } from "src/constant/config.constant";
 
 export default registerAs(
-  configConstant.namespaces.AUTH,
+  ConfigNamespaces.AUTH,
   (): AuthConfigProps => ({
     google: {
       clientID: process.env.GOOGLE_OAUTH_CLIENT_ID,

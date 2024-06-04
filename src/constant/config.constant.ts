@@ -1,6 +1,4 @@
-export default {
-  namespaces: {
-    DB: "db",
-    AUTH: "auth",
-  },
-} as const;
+export enum ConfigNamespaces {
+  DB = "db",
+  AUTH = "auth",
+}

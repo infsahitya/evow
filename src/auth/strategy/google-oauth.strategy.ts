@@ -1,15 +1,15 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
-import guardConstant from "src/constant/guard.constant";
-import configConstant from "src/constant/config.constant";
+import { GuardTokens } from "src/constant/guard.constant";
 import LoggerService from "src/global/logger/logger.service";
+import { ConfigNamespaces } from "src/constant/config.constant";
 import { Strategy, VerifyCallback } from "passport-google-oauth20";
 
 @Injectable()
 export default class GoogleOAuthStrategy extends PassportStrategy(
   Strategy,
-  guardConstant.tokens.GOOGLE_OAUTH,
+  GuardTokens.GOOGLE_OAUTH,
 ) {
   private config: AuthConfigProps;
 
@@ -18,19 +18,16 @@ export default class GoogleOAuthStrategy extends PassportStrategy(
     private readonly loggerService: LoggerService,
   ) {
     super({
-      clientID: configSerivce.get<AuthConfigProps>(
-        configConstant.namespaces.AUTH,
-      ).google.clientID,
-      callbackURL: configSerivce.get<AuthConfigProps>(
-        configConstant.namespaces.AUTH,
-      ).google.callbackURL,
-      clientSecret: configSerivce.get<AuthConfigProps>(
-        configConstant.namespaces.AUTH,
-      ).google.clientSecret,
+      clientID: configSerivce.get<AuthConfigProps>(ConfigNamespaces.AUTH).google
+        .clientID,
+      callbackURL: configSerivce.get<AuthConfigProps>(ConfigNamespaces.AUTH)
+        .google.callbackURL,
+      clientSecret: configSerivce.get<AuthConfigProps>(ConfigNamespaces.AUTH)
+        .google.clientSecret,
       scope: ["profile", "email"],
     });
 
-    this.config = this.configSerivce.get(configConstant.namespaces.AUTH);
+    this.config = this.configSerivce.get(ConfigNamespaces.AUTH);
   }
 
   async validate(
