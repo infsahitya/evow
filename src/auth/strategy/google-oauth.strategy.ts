@@ -1,3 +1,4 @@
+import { formatObj } from "src/utils";
 import { ConfigType } from "@nestjs/config";
 import authConfig from "src/config/auth.config";
 import { Inject, Injectable } from "@nestjs/common";
@@ -27,12 +28,12 @@ export default class GoogleOAuthStrategy extends PassportStrategy(
   async validate(
     _accessToken: string,
     _refreshToken: string,
-    profile: any,
+    _profile: any,
     done: VerifyCallback,
   ): Promise<any> {
-    const { id, name, emails, photos } = profile;
+    this.loggerService.log(`Google OAuth Profile - ${formatObj(_profile)}`);
 
-    this.loggerService.log(`Google Profile - ${JSON.stringify(profile)}`);
+    const { id, name, emails, photos } = _profile;
 
     const user = {
       provider: "google",

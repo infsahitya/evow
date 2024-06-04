@@ -1,12 +1,9 @@
 import { Injectable } from "@nestjs/common";
-import LoggerService from "src/global/logger/logger.service";
 
 @Injectable()
 export default class AuthService {
-  constructor(
-    private readonly loggerService: LoggerService,
-    // private readonly jwtService: JwtService,
-  ) {}
+  constructor() // private readonly jwtService: JwtService,
+  {}
 
   private generateJwt(payload: GoogleOAuthPayloadProps) {
     // return this.jwtService.sign(payload);

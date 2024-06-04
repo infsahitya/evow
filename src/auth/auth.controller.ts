@@ -1,17 +1,16 @@
 import {
-  Res,
   Req,
   Get,
   UseGuards,
   Controller,
-  HttpStatus,
+  VERSION_NEUTRAL,
 } from "@nestjs/common";
 import AuthService from "./auth.service";
 import GoogleOAuthGuard from "./guard/google-oauth.guard";
 
 @Controller({
   path: "auth",
-  version: "1",
+  version: VERSION_NEUTRAL,
 })
 export default class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -22,15 +21,9 @@ export default class AuthController {
 
   @Get("google/callback")
   @UseGuards(GoogleOAuthGuard)
-  async googleOAuthCallback(@Req() req, @Res() res) {
+  async googleOAuthRedirect(@Req() req: Request & { user: any }) {
     const token = this.authService.signIn(req.user);
 
-    res.cookie("access_token", token, {
-      maxAge: 2592000000,
-      sameSite: true,
-      secure: false,
-    });
-
-    return res.status(HttpStatus.OK);
+    return token;
   }
 }
