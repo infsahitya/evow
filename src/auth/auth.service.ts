@@ -9,7 +9,7 @@ export default class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  generateJwt(payload: GoogleOAuthPayloadProps) {
+  private generateJwt(payload: GoogleOAuthPayloadProps) {
     return this.jwtService.sign(payload);
   }
 
