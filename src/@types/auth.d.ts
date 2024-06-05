@@ -4,6 +4,9 @@ interface AuthConfigProps {
     callbackURL: string;
     clientSecret: string;
   };
+  jwt: {
+    secret: string,
+  }
 }
 
 interface GoogleOAuthPayloadProps {

@@ -9,5 +9,8 @@ export default registerAs(
       callbackURL: process.env.GOOGLE_OAUTH_CALLBACK_URL,
       clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
     },
+    jwt: {
+      secret: process.env.JWT_SECRET,
+    }
   }),
 );
