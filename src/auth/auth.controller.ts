@@ -47,12 +47,14 @@ export default class AuthController {
       httpOnly: true,
       maxAge: parseDurationToSeconds(this.authConfigService.jwt.accessTokenExp),
     });
+
     res.cookie("refresh_token", req.refreshToken, {
       httpOnly: true,
       maxAge: parseDurationToSeconds(
         this.authConfigService.jwt.refreshTokenExp,
       ),
     });
+    
     res.status(HttpStatus.OK).send(req.user);
   }
 }
