@@ -1,3 +1,4 @@
+import AuthService from "../auth.service";
 import { ConfigType } from "@nestjs/config";
 import authConfig from "src/config/auth.config";
 import { Inject, Injectable } from "@nestjs/common";
@@ -5,7 +6,6 @@ import { PassportStrategy } from "@nestjs/passport";
 import { GuardTokens } from "src/constant/guard.constant";
 import LoggerService from "src/global/logger/logger.service";
 import { Strategy, VerifyCallback } from "passport-google-oauth20";
-import AuthService from "../auth.service";
 
 @Injectable()
 export default class GoogleOAuthStrategy extends PassportStrategy(
@@ -49,6 +49,8 @@ export default class GoogleOAuthStrategy extends PassportStrategy(
       firstName,
       lastName,
       profilePhoto,
+      googleAccessToken: _accessToken,
+      googleRefreshToken: _refreshToken,
     };
 
     const accessToken = this.authService.generateToken(user, {
