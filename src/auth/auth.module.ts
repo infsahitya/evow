@@ -13,9 +13,6 @@ import GoogleOAuthStrategy from "./strategy/google-oauth.strategy";
     JwtModule.registerAsync({
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>("JWT_SECRET"),
-        signOptions: {
-          expiresIn: configService.get<string>("ACCESS_TOKEN_EXP"),
-        },
       }),
       inject: [ConfigService],
     }),

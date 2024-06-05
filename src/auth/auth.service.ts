@@ -1,19 +1,31 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
+import { ConfigType } from "@nestjs/config";
+import { JwtService } from "@nestjs/jwt";
+import authConfig from "src/config/auth.config";
 
 @Injectable()
 export default class AuthService {
-  constructor() {}
+  constructor(
+    private readonly jwtService: JwtService,
+    @Inject(authConfig.KEY)
+    private readonly authConfigService: ConfigType<typeof authConfig>,
+  ) {}
 
-  private generateJwt(payload: GoogleOAuthPayloadProps) {
-    // return this.jwtService.sign(payload);
-    return payload;
+  generateAccessToken(user: any) {
+    const { email } = user;
+    const payload = { email };
+
+    return this.jwtService.sign(payload, {
+      expiresIn: this.authConfigService.jwt.accessTokenExp,
+    });
   }
 
-  signIn(user: any) {
-    return this.generateJwt({ email: user.email });
-  }
+  generateRefreshToken(user: any) {
+    const { email } = user;
+    const payload = { email };
 
-  signUp(user: any) {
-    return this.generateJwt({ email: user.email });
+    return this.jwtService.sign(payload, {
+      expiresIn: this.authConfigService.jwt.refreshTokenExp,
+    });
   }
 }
