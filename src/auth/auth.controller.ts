@@ -2,18 +2,24 @@ import {
   Req,
   Get,
   Res,
+  Inject,
   UseGuards,
   Controller,
-  VERSION_NEUTRAL,
-  Inject,
   HttpStatus,
+  VERSION_NEUTRAL,
 } from "@nestjs/common";
-import { Response } from "express";
 import AuthService from "./auth.service";
-import GoogleOAuthGuard from "./guard/google-oauth.guard";
-import authConfig from "src/config/auth.config";
 import { ConfigType } from "@nestjs/config";
+import { Request, Response } from "express";
+import authConfig from "src/config/auth.config";
 import { parseDurationToSeconds } from "src/utils";
+import GoogleOAuthGuard from "./guard/google-oauth.guard";
+
+interface GoogleOAuthRedirectRequest extends Request {
+  accessToken: string;
+  refreshToken: string;
+  user: ValidatedUserProps;
+}
 
 @Controller({
   path: "auth",
@@ -34,11 +40,7 @@ export default class AuthController {
   @UseGuards(GoogleOAuthGuard)
   async googleOAuthRedirect(
     @Req()
-    req: Request & {
-      accessToken: string;
-      refreshToken: string;
-      user: ValidatedUserProps;
-    },
+    req: GoogleOAuthRedirectRequest,
     @Res({ passthrough: true }) res: Response,
   ) {
     res.cookie("access_token", req.accessToken, {
