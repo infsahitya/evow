@@ -11,19 +11,21 @@ export default class AuthService {
     private readonly authConfigService: ConfigType<typeof authConfig>,
   ) {}
 
-  generateAccessToken(user: any) {
+  generateToken(user: any, options: { type: "refresh" | "access" }) {
     const { email } = user;
     const payload = { email };
 
+    if (options.type === "access") return this.generateAccessToken(payload);
+    if (options.type === "refresh") return this.generateRefreshToken(payload);
+  }
+
+  private generateAccessToken(payload: any) {
     return this.jwtService.sign(payload, {
       expiresIn: this.authConfigService.jwt.accessTokenExp,
     });
   }
 
-  generateRefreshToken(user: any) {
-    const { email } = user;
-    const payload = { email };
-
+  private generateRefreshToken(payload: any) {
     return this.jwtService.sign(payload, {
       expiresIn: this.authConfigService.jwt.refreshTokenExp,
     });
