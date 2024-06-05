@@ -47,7 +47,11 @@ export default class GoogleOAuthStrategy extends PassportStrategy(
       firstName,
       lastName,
       profilePhoto,
+      _accessToken,
+      _refreshToken,
     };
+
+    this.loggerService.log(user, "Framed User Object");
 
     done(null, user);
   }

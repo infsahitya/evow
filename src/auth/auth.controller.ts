@@ -22,8 +22,6 @@ export default class AuthController {
   @Get("google/callback")
   @UseGuards(GoogleOAuthGuard)
   async googleOAuthRedirect(@Req() req: Request & { user: any }) {
-    const token = this.authService.signIn(req.user);
-
-    return token;
+    return req.user;
   }
 }
