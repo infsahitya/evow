@@ -11,6 +11,8 @@ export default registerAs(
     },
     jwt: {
       secret: process.env.JWT_SECRET,
-    }
+      accessTokenExp: process.env.ACCESS_TOKEN_EXP,
+      refreshTokenExp: process.env.REFRESH_TOKEN_EXP,
+    },
   }),
 );

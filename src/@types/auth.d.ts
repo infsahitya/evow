@@ -5,8 +5,10 @@ interface AuthConfigProps {
     clientSecret: string;
   };
   jwt: {
-    secret: string,
-  }
+    secret: string;
+    accessTokenExp: string;
+    refreshTokenExp: string;
+  };
 }
 
 interface GoogleOAuthPayloadProps {
