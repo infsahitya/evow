@@ -21,7 +21,9 @@ export default class AuthController {
 
   @Get("google/callback")
   @UseGuards(GoogleOAuthGuard)
-  async googleOAuthRedirect(@Req() req: Request & { user: any }) {
+  async googleOAuthRedirect(
+    @Req() req: Request & { user: ValidatedUserProps },
+  ) {
     return req.user;
   }
 }

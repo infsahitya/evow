@@ -40,15 +40,13 @@ export default class GoogleOAuthStrategy extends PassportStrategy(
       name: { familyName: lastName, givenName: firstName },
     } = _profile;
 
-    const user = {
+    const user: ValidatedUserProps = {
       providerID,
       providerName,
       email,
       firstName,
       lastName,
       profilePhoto,
-      _accessToken,
-      _refreshToken,
     };
 
     this.loggerService.log(user, "Framed User Object");

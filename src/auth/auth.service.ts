@@ -11,7 +11,10 @@ export default class AuthService {
     private readonly authConfigService: ConfigType<typeof authConfig>,
   ) {}
 
-  generateToken(user: any, options: { type: "refresh" | "access" }) {
+  generateToken(
+    user: ValidatedUserProps,
+    options: { type: "refresh" | "access" },
+  ) {
     const { email } = user;
     const payload = { email };
 
@@ -19,13 +22,13 @@ export default class AuthService {
     if (options.type === "refresh") return this.generateRefreshToken(payload);
   }
 
-  private generateAccessToken(payload: any) {
+  private generateAccessToken(payload: UserPayloadProps) {
     return this.jwtService.sign(payload, {
       expiresIn: this.authConfigService.jwt.accessTokenExp,
     });
   }
 
-  private generateRefreshToken(payload: any) {
+  private generateRefreshToken(payload: UserPayloadProps) {
     return this.jwtService.sign(payload, {
       expiresIn: this.authConfigService.jwt.refreshTokenExp,
     });
