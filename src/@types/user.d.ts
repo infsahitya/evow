@@ -5,8 +5,8 @@ interface ValidatedUserProps {
   providerID: string;
   providerName: string;
   profilePhoto: string;
-  googleAccessToken: string;
-  googleRefreshToken: string;
+  // googleAccessToken: string;
+  // googleRefreshToken: string;
 }
 
 type UserPayloadProps = Pick<ValidatedUserProps, "email">;

@@ -49,8 +49,8 @@ export default class GoogleOAuthStrategy extends PassportStrategy(
       firstName,
       lastName,
       profilePhoto,
-      googleAccessToken: _accessToken,
-      googleRefreshToken: _refreshToken,
+      // googleAccessToken: _accessToken,
+      // googleRefreshToken: _refreshToken,
     };
 
     const accessToken = this.authService.generateToken(user, {
