@@ -1,5 +1,6 @@
 import AppModule from "./app.module";
 import { NestFactory } from "@nestjs/core";
+import * as cookieParser from "cookie-parser";
 import { VERSION_NEUTRAL, VersioningType } from "@nestjs/common";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
@@ -7,6 +8,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: ["error", "debug", "fatal", "log", "verbose", "warn"],
   });
+
+  app.use(cookieParser());
 
   app.enableVersioning({
     type: VersioningType.URI,
