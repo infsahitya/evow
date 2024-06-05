@@ -3,6 +3,15 @@ import { ConfigType } from "@nestjs/config";
 import authConfig from "src/config/auth.config";
 import { Inject, Injectable } from "@nestjs/common";
 
+interface AccessTokenPayload {
+  sub: string;
+  email: string;
+}
+
+interface RefreshTokenPayload {
+  sub: string;
+}
+
 @Injectable()
 export default class AuthService {
   constructor(
@@ -15,20 +24,24 @@ export default class AuthService {
     user: ValidatedUserProps,
     options: { type: "refresh" | "access" },
   ) {
-    const { email } = user;
-    const payload = { email };
-
-    if (options.type === "access") return this.generateAccessToken(payload);
-    if (options.type === "refresh") return this.generateRefreshToken(payload);
+    if (options.type === "access")
+      return this.generateAccessToken({
+        sub: user.email,
+        email: user.email,
+      });
+    if (options.type === "refresh")
+      return this.generateRefreshToken({
+        sub: user.email,
+      });
   }
 
-  private generateAccessToken(payload: UserPayloadProps): string {
+  private generateAccessToken(payload: AccessTokenPayload): string {
     return this.jwtService.sign(payload, {
       expiresIn: this.authConfigService.jwt.accessTokenExp,
     });
   }
 
-  private generateRefreshToken(payload: UserPayloadProps): string {
+  private generateRefreshToken(payload: RefreshTokenPayload): string {
     return this.jwtService.sign(payload, {
       expiresIn: this.authConfigService.jwt.refreshTokenExp,
     });
