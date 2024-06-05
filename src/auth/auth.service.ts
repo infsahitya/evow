@@ -1,7 +1,7 @@
-import { Inject, Injectable } from "@nestjs/common";
-import { ConfigType } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
+import { ConfigType } from "@nestjs/config";
 import authConfig from "src/config/auth.config";
+import { Inject, Injectable } from "@nestjs/common";
 
 @Injectable()
 export default class AuthService {
