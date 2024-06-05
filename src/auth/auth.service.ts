@@ -22,13 +22,13 @@ export default class AuthService {
     if (options.type === "refresh") return this.generateRefreshToken(payload);
   }
 
-  private generateAccessToken(payload: UserPayloadProps) {
+  private generateAccessToken(payload: UserPayloadProps): string {
     return this.jwtService.sign(payload, {
       expiresIn: this.authConfigService.jwt.accessTokenExp,
     });
   }
 
-  private generateRefreshToken(payload: UserPayloadProps) {
+  private generateRefreshToken(payload: UserPayloadProps): string {
     return this.jwtService.sign(payload, {
       expiresIn: this.authConfigService.jwt.refreshTokenExp,
     });

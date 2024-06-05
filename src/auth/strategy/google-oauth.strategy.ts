@@ -5,6 +5,7 @@ import { PassportStrategy } from "@nestjs/passport";
 import { GuardTokens } from "src/constant/guard.constant";
 import LoggerService from "src/global/logger/logger.service";
 import { Strategy, VerifyCallback } from "passport-google-oauth20";
+import AuthService from "../auth.service";
 
 @Injectable()
 export default class GoogleOAuthStrategy extends PassportStrategy(
@@ -12,6 +13,7 @@ export default class GoogleOAuthStrategy extends PassportStrategy(
   GuardTokens.GOOGLE_OAUTH,
 ) {
   constructor(
+    private readonly authService: AuthService,
     private readonly loggerService: LoggerService,
     @Inject(authConfig.KEY)
     private readonly authConfigService: ConfigType<typeof authConfig>,
@@ -49,8 +51,13 @@ export default class GoogleOAuthStrategy extends PassportStrategy(
       profilePhoto,
     };
 
-    this.loggerService.log(user, "Framed User Object");
+    const accessToken = this.authService.generateToken(user, {
+      type: "access",
+    });
+    const refreshToken = this.authService.generateToken(user, {
+      type: "refresh",
+    });
 
-    done(null, user);
+    done(null, { ...user, accessToken, refreshToken });
   }
 }
