@@ -41,15 +41,15 @@ export default class AuthController {
     req: GoogleOAuthRedirectRequest,
     @Res({ passthrough: true }) res: Response,
   ) {
-    this.loggerService.log(req.user, "Request User");
+    const { user } = req;
 
-    res.cookie("access_token", req.user.accessToken, {
+    res.cookie("access_token", user.accessToken, {
       httpOnly: true,
       // secure: true, /* will be enabled for HTTPS connection only */
       maxAge: parseDurationToSeconds(this.authConfigService.jwt.accessTokenExp),
     });
 
-    res.cookie("refresh_token", req.user.refreshToken, {
+    res.cookie("refresh_token", user.refreshToken, {
       httpOnly: true,
       // secure: true, /* will be enabled for HTTPS connection only */
       maxAge: parseDurationToSeconds(
@@ -57,6 +57,13 @@ export default class AuthController {
       ),
     });
 
-    res.status(HttpStatus.OK).send(req.user);
+    delete user.accessToken;
+    delete user.refreshToken;
+    delete user.googleAccessToken;
+    delete user.googleRefreshToken;
+
+    this.loggerService.log(user, "Request User");
+
+    res.status(HttpStatus.OK).send(user);
   }
 }
