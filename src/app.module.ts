@@ -7,6 +7,7 @@ import PrismaModule from "./global/prisma/prisma.module";
 import LoggerModule from "./global/logger/logger.module";
 import LoggerService from "./global/logger/logger.service";
 import { ConfigModule, ConfigType } from "@nestjs/config";
+import UserModule from "./user/user.module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ConfigModule, ConfigType } from "@nestjs/config";
     LoggerModule,
     PrismaModule,
     AuthModule,
+    UserModule,
   ],
 })
 export default class AppModule {
