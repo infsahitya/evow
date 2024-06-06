@@ -8,16 +8,14 @@ import {
   HttpStatus,
   VERSION_NEUTRAL,
 } from "@nestjs/common";
-import AuthService from "./auth.service";
 import { ConfigType } from "@nestjs/config";
 import { Request, Response } from "express";
 import authConfig from "src/config/auth.config";
 import { parseDurationToSeconds } from "src/utils";
 import GoogleOAuthGuard from "./guard/google-oauth.guard";
+import LoggerService from "src/global/logger/logger.service";
 
 interface GoogleOAuthRedirectRequest extends Request {
-  accessToken: string;
-  refreshToken: string;
   user: ValidatedUserProps;
 }
 
@@ -27,7 +25,7 @@ interface GoogleOAuthRedirectRequest extends Request {
 })
 export default class AuthController {
   constructor(
-    private readonly authService: AuthService,
+    private readonly loggerService: LoggerService,
     @Inject(authConfig.KEY)
     private readonly authConfigService: ConfigType<typeof authConfig>,
   ) {}
@@ -43,18 +41,22 @@ export default class AuthController {
     req: GoogleOAuthRedirectRequest,
     @Res({ passthrough: true }) res: Response,
   ) {
-    res.cookie("access_token", req.accessToken, {
+    this.loggerService.log(req.user, "Request User");
+
+    res.cookie("access_token", req.user.accessToken, {
       httpOnly: true,
+      // secure: true, /* will be enabled for HTTPS connection only */
       maxAge: parseDurationToSeconds(this.authConfigService.jwt.accessTokenExp),
     });
 
-    res.cookie("refresh_token", req.refreshToken, {
+    res.cookie("refresh_token", req.user.refreshToken, {
       httpOnly: true,
+      // secure: true, /* will be enabled for HTTPS connection only */
       maxAge: parseDurationToSeconds(
         this.authConfigService.jwt.refreshTokenExp,
       ),
     });
-    
+
     res.status(HttpStatus.OK).send(req.user);
   }
 }

@@ -4,13 +4,21 @@ import authConfig from "src/config/auth.config";
 import { Inject, Injectable } from "@nestjs/common";
 
 interface AccessTokenPayload {
-  sub: string;
-  email: string;
+  type: "access";
+  data: {
+    sub: string;
+    email: string;
+  };
 }
 
 interface RefreshTokenPayload {
-  sub: string;
+  type: "refresh";
+  data: {
+    sub: string;
+  };
 }
+
+type Payload = AccessTokenPayload | RefreshTokenPayload;
 
 @Injectable()
 export default class AuthService {
@@ -20,28 +28,25 @@ export default class AuthService {
     private readonly authConfigService: ConfigType<typeof authConfig>,
   ) {}
 
-  generateToken(
-    user: ValidatedUserProps,
-    options: { type: "refresh" | "access" },
-  ) {
-    if (options.type === "access")
+  generateToken(payload: Payload) {
+    if (payload.type === "access")
       return this.generateAccessToken({
-        sub: user.email,
-        email: user.email,
+        sub: payload.data.email,
+        email: payload.data.email,
       });
-    if (options.type === "refresh")
+    if (payload.type === "refresh")
       return this.generateRefreshToken({
-        sub: user.email,
+        sub: payload.data.sub,
       });
   }
 
-  private generateAccessToken(payload: AccessTokenPayload): string {
+  private generateAccessToken(payload: AccessTokenPayload["data"]): string {
     return this.jwtService.sign(payload, {
       expiresIn: this.authConfigService.jwt.accessTokenExp,
     });
   }
 
-  private generateRefreshToken(payload: RefreshTokenPayload): string {
+  private generateRefreshToken(payload: RefreshTokenPayload["data"]): string {
     return this.jwtService.sign(payload, {
       expiresIn: this.authConfigService.jwt.refreshTokenExp,
     });
