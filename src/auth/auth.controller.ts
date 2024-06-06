@@ -15,6 +15,7 @@ import authConfig from "src/config/auth.config";
 import { parseDurationToSeconds } from "src/utils";
 import GoogleOAuthGuard from "./guard/google-oauth.guard";
 import LoggerService from "src/global/logger/logger.service";
+import { AuthTokens } from "src/constant/token.constant";
 
 interface GoogleOAuthRedirectRequest extends Request {
   user: ValidatedUserProps;
@@ -50,13 +51,13 @@ export default class AuthController {
   ) {
     const { user } = req;
 
-    res.cookie("access_token", user.accessToken, {
+    res.cookie(AuthTokens.ACCESS_TOKEN, user.accessToken, {
       httpOnly: true,
       secure: this.isProduction /* will be enabled for HTTPS connection only */,
       maxAge: parseDurationToSeconds(this.authConfigService.jwt.accessTokenExp),
     });
 
-    res.cookie("refresh_token", user.refreshToken, {
+    res.cookie(AuthTokens.REFRESH_TOKEN, user.refreshToken, {
       httpOnly: true,
       secure: this.isProduction /* will be enabled for HTTPS connection only */,
       maxAge: parseDurationToSeconds(
