@@ -13,7 +13,7 @@ import { Request, Response } from "express";
 import envConfig from "src/config/env.config";
 import authConfig from "src/config/auth.config";
 import { parseDurationToSeconds } from "src/utils";
-import GoogleOAuthGuard from "./guard/google-oauth.guard";
+import GoogleOAuthGuard from "./guard/google.guard";
 import LoggerService from "src/global/logger/logger.service";
 import { AuthTokens } from "src/constant/token.constant";
 
