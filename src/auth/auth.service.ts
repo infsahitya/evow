@@ -41,14 +41,16 @@ export default class AuthService {
   }
 
   private generateAccessToken(payload: AccessTokenPayload["data"]): string {
-    return this.jwtService.sign(payload, {
-      expiresIn: this.authConfigService.jwt.accessTokenExp,
-    });
+    // return this.jwtService.sign(payload, {
+    //   expiresIn: this.authConfigService.jwt.accessTokenExp,
+    // });
+    return this.jwtService.sign(payload);
   }
 
   private generateRefreshToken(payload: RefreshTokenPayload["data"]): string {
-    return this.jwtService.sign(payload, {
-      expiresIn: this.authConfigService.jwt.refreshTokenExp,
-    });
+    // return this.jwtService.sign(payload, {
+    //   expiresIn: this.authConfigService.jwt.refreshTokenExp,
+    // });
+    return this.jwtService.sign(payload);
   }
 }

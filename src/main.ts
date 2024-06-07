@@ -1,7 +1,11 @@
 import AppModule from "./app.module";
 import { NestFactory } from "@nestjs/core";
 import * as cookieParser from "cookie-parser";
-import { VERSION_NEUTRAL, VersioningType } from "@nestjs/common";
+import {
+  ValidationPipe,
+  VERSION_NEUTRAL,
+  VersioningType,
+} from "@nestjs/common";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
 async function bootstrap() {
@@ -15,6 +19,13 @@ async function bootstrap() {
     type: VersioningType.URI,
     defaultVersion: VERSION_NEUTRAL,
   });
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: false,
+    }),
+  );
 
   const config = new DocumentBuilder()
     .setTitle("Users")

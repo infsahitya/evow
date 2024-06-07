@@ -7,6 +7,7 @@ import {
   Controller,
   HttpStatus,
   VERSION_NEUTRAL,
+  Body,
 } from "@nestjs/common";
 import { ConfigType } from "@nestjs/config";
 import { Request, Response } from "express";
@@ -14,8 +15,10 @@ import envConfig from "src/config/env.config";
 import authConfig from "src/config/auth.config";
 import { parseDurationToSeconds } from "src/utils";
 import GoogleOAuthGuard from "./guard/google.guard";
-import LoggerService from "src/global/logger/logger.service";
 import { AuthTokens } from "src/constant/token.constant";
+import LoggerService from "src/global/logger/logger.service";
+import EmailLoginDTO from "./model/email-login.dto";
+import EmailSignupDTO from "./model/email-signup.dto";
 
 interface GoogleOAuthRedirectRequest extends Request {
   user: ValidatedUserProps;
@@ -37,6 +40,12 @@ export default class AuthController {
   ) {
     this.isProduction = envConfigService.NODE_ENV === "production";
   }
+
+  @Get("login/email")
+  emailSignup(@Body() body: EmailSignupDTO) {}
+
+  @Get("signup/email")
+  emailLogin(@Body() body: EmailLoginDTO) {}
 
   @Get("google-oauth20")
   @UseGuards(GoogleOAuthGuard)
@@ -65,7 +74,7 @@ export default class AuthController {
       ),
     });
 
-    delete user.accessToken;
+    // delete user.accessToken;
     delete user.refreshToken;
     delete user.googleAccessToken;
     delete user.googleRefreshToken;

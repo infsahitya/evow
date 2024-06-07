@@ -1,13 +1,13 @@
 import dbConfig from "./config/db.config";
 import AuthModule from "./auth/auth.module";
+import UserModule from "./user/user.module";
 import envConfig from "./config/env.config";
 import authConfig from "./config/auth.config";
 import { Inject, Module } from "@nestjs/common";
 import PrismaModule from "./global/prisma/prisma.module";
 import LoggerModule from "./global/logger/logger.module";
-import LoggerService from "./global/logger/logger.service";
 import { ConfigModule, ConfigType } from "@nestjs/config";
-import UserModule from "./user/user.module";
+import LoggerService from "./global/logger/logger.service";
 
 @Module({
   imports: [
