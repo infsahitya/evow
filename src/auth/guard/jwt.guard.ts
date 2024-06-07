@@ -1,36 +1,11 @@
-import {
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
-} from "@nestjs/common";
-import { Request } from "express";
-import { Observable } from "rxjs";
 import { JwtService } from "@nestjs/jwt";
 import { AuthGuard } from "@nestjs/passport";
+import { Injectable } from "@nestjs/common";
 import { GuardTokens } from "src/constant/guard.constant";
 
 @Injectable()
 export default class JwtGuard extends AuthGuard(GuardTokens.JWT) {
   constructor(private readonly jwtService: JwtService) {
     super();
-  }
-
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
-    const request = context.switchToHttp().getRequest<Request>();
-    const token = request.headers.authorization.split(" ")[1];
-    console.log(token);
-
-    if (!token) {
-      throw new UnauthorizedException("Token not found");
-    }
-    try {
-      const decoded = this.jwtService.verify(token);
-      request.user = decoded;
-    } catch (err) {
-      throw new UnauthorizedException("Invalid token");
-    }
-    return true;
   }
 }

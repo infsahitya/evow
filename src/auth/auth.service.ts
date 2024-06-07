@@ -27,30 +27,4 @@ export default class AuthService {
     @Inject(authConfig.KEY)
     private readonly authConfigService: ConfigType<typeof authConfig>,
   ) {}
-
-  generateToken(payload: Payload) {
-    if (payload.type === "access")
-      return this.generateAccessToken({
-        sub: payload.data.email,
-        email: payload.data.email,
-      });
-    if (payload.type === "refresh")
-      return this.generateRefreshToken({
-        sub: payload.data.sub,
-      });
-  }
-
-  private generateAccessToken(payload: AccessTokenPayload["data"]): string {
-    // return this.jwtService.sign(payload, {
-    //   expiresIn: this.authConfigService.jwt.accessTokenExp,
-    // });
-    return this.jwtService.sign(payload);
-  }
-
-  private generateRefreshToken(payload: RefreshTokenPayload["data"]): string {
-    // return this.jwtService.sign(payload, {
-    //   expiresIn: this.authConfigService.jwt.refreshTokenExp,
-    // });
-    return this.jwtService.sign(payload);
-  }
 }

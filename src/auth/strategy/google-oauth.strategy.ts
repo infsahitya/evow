@@ -42,15 +42,6 @@ export default class GoogleOAuthStrategy extends PassportStrategy(
       name: { familyName: lastName, givenName: firstName },
     } = _profile;
 
-    const refreshToken = this.authService.generateToken({
-      type: "refresh",
-      data: { sub: email },
-    });
-    const accessToken = this.authService.generateToken({
-      type: "access",
-      data: { email: email, sub: email },
-    });
-
     const user: ValidatedUserProps = {
       providerID,
       providerName,
@@ -60,8 +51,8 @@ export default class GoogleOAuthStrategy extends PassportStrategy(
       profilePhoto,
       googleAccessToken: _accessToken,
       googleRefreshToken: _refreshToken,
-      accessToken,
-      refreshToken,
+      accessToken: "",
+      refreshToken: "",
     };
 
     done(null, user);
