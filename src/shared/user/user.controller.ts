@@ -1,6 +1,5 @@
 import UserService from "./user.service";
-import JwtGuard from "src/auth/guard/jwt.guard";
-import { Controller, Get, UseGuards } from "@nestjs/common";
+import { Controller } from "@nestjs/common";
 
 @Controller({
   path: "user",
@@ -8,10 +7,4 @@ import { Controller, Get, UseGuards } from "@nestjs/common";
 })
 export default class UserController {
   constructor(private readonly userService: UserService) {}
-
-  @Get("greet")
-  @UseGuards(JwtGuard)
-  hello() {
-    return this.userService.hello();
-  }
 }

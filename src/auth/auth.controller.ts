@@ -2,12 +2,13 @@ import {
   Req,
   Get,
   Res,
+  Post,
+  Body,
   Inject,
   UseGuards,
   Controller,
   HttpStatus,
   VERSION_NEUTRAL,
-  Body,
 } from "@nestjs/common";
 import { ConfigType } from "@nestjs/config";
 import { Request, Response } from "express";
@@ -15,11 +16,11 @@ import envConfig from "src/config/env.config";
 import authConfig from "src/config/auth.config";
 import { parseDurationToSeconds } from "src/utils";
 import GoogleOAuthGuard from "./guard/google.guard";
-import { AuthTokens } from "src/constant/token.constant";
-import LoggerService from "src/global/logger/logger.service";
 import EmailLoginDTO from "./model/email-login.dto";
 import EmailSignupDTO from "./model/email-signup.dto";
-import UserService from "src/shared/user/user.service";
+import { AuthTokens } from "src/constant/token.constant";
+import LoggerService from "src/global/logger/logger.service";
+import AuthService from "./auth.service";
 
 interface GoogleOAuthRedirectRequest extends Request {
   user: ValidatedUserProps;
@@ -33,7 +34,7 @@ export default class AuthController {
   private isProduction: boolean = false;
 
   constructor(
-    private readonly userService: UserService,
+    private readonly authService: AuthService,
     private readonly loggerService: LoggerService,
     @Inject(envConfig.KEY)
     private readonly envConfigService: ConfigType<typeof envConfig>,
@@ -43,14 +44,14 @@ export default class AuthController {
     this.isProduction = envConfigService.NODE_ENV === "production";
   }
 
-  @Get("login/email")
+  @Post("login/email")
   emailLogin(@Body() body: EmailLoginDTO) {
     return `Login using email ${body}`;
   }
 
-  @Get("signup/email")
+  @Post("signup/email")
   emailSignup(@Body() body: EmailSignupDTO) {
-    return this.userService.emailSignup(body);
+    return this.authService.emailSignup(body);
   }
 
   @Get("google-oauth20")

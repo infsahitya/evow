@@ -7,6 +7,7 @@ import * as bcrypt from "bcrypt";
 import { Contact, User } from "@prisma/client";
 import EmailSignupDTO from "src/auth/model/email-signup.dto";
 import PrismaService from "src/global/prisma/prisma.service";
+import LoggerService from "src/global/logger/logger.service";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 export interface EmailSignupResponse
@@ -17,7 +18,10 @@ export interface EmailSignupResponse
 export default class UserService {
   private hashSaltRounds: number;
 
-  constructor(private readonly prismaService: PrismaService) {
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly logger: LoggerService,
+  ) {
     this.hashSaltRounds = 10;
   }
 
@@ -43,8 +47,8 @@ export default class UserService {
           contact: {
             create: {
               email: email,
-              phone: null!,
-              whatsapp: null!,
+              phone: "",
+              whatsapp: "",
             },
           },
         },
@@ -52,7 +56,9 @@ export default class UserService {
 
       delete user.password;
 
-      return { ...user, email };
+      const temp = { ...user, email };
+
+      return temp;
     } catch (error) {
       if (
         error instanceof PrismaClientKnownRequestError &&
