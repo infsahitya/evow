@@ -10,8 +10,9 @@ import {
   HttpStatus,
   VERSION_NEUTRAL,
 } from "@nestjs/common";
+import { Response } from "express";
+import AuthService from "./auth.service";
 import { ConfigType } from "@nestjs/config";
-import { Request, Response } from "express";
 import envConfig from "src/config/env.config";
 import authConfig from "src/config/auth.config";
 import { parseDurationToSeconds } from "src/utils";
@@ -20,11 +21,6 @@ import EmailLoginDTO from "./model/email-login.dto";
 import EmailSignupDTO from "./model/email-signup.dto";
 import { AuthTokens } from "src/constant/token.constant";
 import LoggerService from "src/global/logger/logger.service";
-import AuthService from "./auth.service";
-
-interface GoogleOAuthRedirectRequest extends Request {
-  user: ValidatedUserProps;
-}
 
 @Controller({
   path: "auth",
@@ -62,7 +58,7 @@ export default class AuthController {
   @UseGuards(GoogleOAuthGuard)
   async googleOAuthRedirect(
     @Req()
-    req: GoogleOAuthRedirectRequest,
+    req: any,
     @Res({ passthrough: true }) res: Response,
   ) {
     const { user } = req;

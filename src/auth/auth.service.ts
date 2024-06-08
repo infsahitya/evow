@@ -1,12 +1,11 @@
 import { JwtService } from "@nestjs/jwt";
 import { Injectable } from "@nestjs/common";
 import EmailSignupDTO from "./model/email-signup.dto";
-import UserService, { EmailSignupResponse } from "src/shared/user/user.service";
-
-interface EmailSignupValidatedProps extends EmailSignupResponse {
-  access_token: string;
-  refresh_token: string;
-}
+import UserService from "src/shared/user/user.service";
+import {
+  EmailSignupResponse,
+  EmailSignupValidatedProps,
+} from "src/@types/auth";
 
 @Injectable()
 export default class AuthService {

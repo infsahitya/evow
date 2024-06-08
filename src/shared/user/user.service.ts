@@ -4,15 +4,11 @@ import {
   BadRequestException,
 } from "@nestjs/common";
 import * as bcrypt from "bcrypt";
-import { Contact, User } from "@prisma/client";
 import EmailSignupDTO from "src/auth/model/email-signup.dto";
 import PrismaService from "src/global/prisma/prisma.service";
 import LoggerService from "src/global/logger/logger.service";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-
-export interface EmailSignupResponse
-  extends Omit<User, "password">,
-    Pick<Contact, "email"> {}
+import { EmailSignupResponse } from "src/@types/auth";
 
 @Injectable()
 export default class UserService {
