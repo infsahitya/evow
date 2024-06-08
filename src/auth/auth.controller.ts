@@ -42,7 +42,7 @@ export default class AuthController {
 
   @Post("login/email")
   emailLogin(@Body() body: EmailLoginDTO) {
-    return `Login using email ${body}`;
+    return this.authService.emailLogin(body);
   }
 
   @Post("signup/email")

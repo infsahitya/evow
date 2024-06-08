@@ -56,15 +56,15 @@ export default class AuthService {
   async emailLogin(data: EmailLoginDTO): Promise<EmailLoginValidatedProps> {
     const user = await this.userService.emailLogin(data);
     const accessToken = await this.jwtService.signAsync({
-      sub: user.user.id,
+      sub: user.id,
     });
     const refreshToken = await this.jwtService.signAsync({
-      sub: user.user.id,
+      sub: user.id,
     });
 
     try {
       const token = await this.prismaService.token.update({
-        where: { userID: user.user.id },
+        where: { userID: user.id },
         data: {
           access: accessToken,
           refresh: refreshToken,

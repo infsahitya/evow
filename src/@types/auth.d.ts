@@ -28,9 +28,8 @@ interface EmailSignupValidatedProps extends EmailSignupResponse {
 }
 
 interface EmailLoginResposne
-  extends Pick<Contact, "email" | "phone" | "whatsapp"> {
-  user: Omit<User, "password">;
-}
+  extends Pick<Contact, "email" | "phone" | "whatsapp">,
+    Omit<User, "password"> {}
 
 interface EmailLoginValidatedProps extends EmailLoginResposne {
   [AuthTokens.ACCESS_TOKEN]: string;
