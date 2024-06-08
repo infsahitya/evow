@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from "@nestjs/common";
 import * as bcrypt from "bcrypt";
-import { EmailSignupResponse } from "src/@types/auth";
+import { EmailLoginResposne, EmailSignupResponse } from "src/@types/auth";
 import EmailLoginDTO from "src/auth/model/email-login.dto";
 import EmailSignupDTO from "src/auth/model/email-signup.dto";
 import PrismaService from "src/global/prisma/prisma.service";
@@ -72,7 +72,7 @@ export default class UserService {
     }
   }
 
-  async emailLogin(data: EmailLoginDTO) {
+  async emailLogin(data: EmailLoginDTO): Promise<EmailLoginResposne> {
     try {
       const contact = await this.prismaService.contact.findUnique({
         where: {

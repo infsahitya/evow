@@ -3,9 +3,10 @@ import { Injectable } from "@nestjs/common";
 import EmailSignupDTO from "./model/email-signup.dto";
 import UserService from "src/shared/user/user.service";
 import {
-  EmailSignupResponse,
+  EmailLoginValidatedProps,
   EmailSignupValidatedProps,
 } from "src/@types/auth";
+import EmailLoginDTO from "./model/email-login.dto";
 import { AuthTokens } from "src/constant/token.constant";
 import PrismaService from "src/global/prisma/prisma.service";
 import LoggerService from "src/global/logger/logger.service";
@@ -19,28 +20,13 @@ export default class AuthService {
     private readonly prismaService: PrismaService,
   ) {}
 
-  private async generateToken(
-    user: EmailSignupResponse,
-    options: { type: "refresh" | "access" },
-  ) {
-    if (options.type === "refresh")
-      return this.jwtService.signAsync({
-        sub: user.id,
-      });
-
-    if (options.type === "access")
-      return this.jwtService.signAsync({
-        sub: user.id,
-      });
-  }
-
   async emailSignup(data: EmailSignupDTO): Promise<EmailSignupValidatedProps> {
     const user = await this.userService.emailSignup(data);
-    const accessToken = await this.generateToken(user, {
-      type: "access",
+    const accessToken = await this.jwtService.signAsync({
+      sub: user.id,
     });
-    const refreshToken = await this.generateToken(user, {
-      type: "refresh",
+    const refreshToken = await this.jwtService.signAsync({
+      sub: user.id,
     });
 
     try {
@@ -64,6 +50,34 @@ export default class AuthService {
       };
     } catch (error) {
       this.logger.error(error, "Token push error");
+    }
+  }
+
+  async emailLogin(data: EmailLoginDTO): Promise<EmailLoginValidatedProps> {
+    const user = await this.userService.emailLogin(data);
+    const accessToken = await this.jwtService.signAsync({
+      sub: user.user.id,
+    });
+    const refreshToken = await this.jwtService.signAsync({
+      sub: user.user.id,
+    });
+
+    try {
+      const token = await this.prismaService.token.update({
+        where: { userID: user.user.id },
+        data: {
+          access: accessToken,
+          refresh: refreshToken,
+        },
+      });
+
+      return {
+        ...user,
+        [AuthTokens.ACCESS_TOKEN]: token.access,
+        [AuthTokens.REFRESH_TOKEN]: token.refresh,
+      };
+    } catch (error) {
+      this.logger.error(error, "Token update error");
     }
   }
 }
