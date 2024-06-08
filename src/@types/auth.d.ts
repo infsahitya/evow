@@ -1,4 +1,5 @@
 import { Contact, User } from "@prisma/client";
+import { AuthTokens } from "src/constant/token.constant";
 
 interface AuthConfigProps {
   google: {
@@ -22,6 +23,6 @@ interface EmailSignupResponse
     Pick<Contact, "email"> {}
 
 interface EmailSignupValidatedProps extends EmailSignupResponse {
-  access_token: string;
-  refresh_token: string;
+  [AuthTokens.ACCESS_TOKEN]: string;
+  [AuthTokens.REFRESH_TOKEN]: string;
 }

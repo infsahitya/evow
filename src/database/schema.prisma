@@ -32,8 +32,8 @@ model Token {
   access  String @unique
   refresh String @unique
 
-  googleOAuthAccess  String @unique
-  googleOAuthRefresh String @unique
+  googleOAuthAccess  String? @unique
+  googleOAuthRefresh String? @unique
 
   user   User   @relation(fields: [userID], references: [id])
   userID String @unique
@@ -47,9 +47,9 @@ model Token {
 model Contact {
   id String @id @unique @default(uuid())
 
-  email    String
-  phone    String?
-  whatsapp String
+  email    String  @unique
+  phone    String? @unique
+  whatsapp String  @unique
 
   user   User   @relation(fields: [userID], references: [id])
   userID String @unique

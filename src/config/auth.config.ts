@@ -1,4 +1,5 @@
 import { registerAs } from "@nestjs/config";
+import { AuthConfigProps } from "src/@types/auth";
 import { ConfigNamespaces } from "src/constant/config.constant";
 
 export default registerAs(

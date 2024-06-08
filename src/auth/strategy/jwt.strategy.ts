@@ -21,7 +21,7 @@ export default class JwtStrategy extends PassportStrategy(
     });
   }
 
-  validate(payload: UserPayloadProps) {
+  validate(payload) {
     return payload;
   }
 }

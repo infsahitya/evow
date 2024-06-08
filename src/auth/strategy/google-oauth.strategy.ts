@@ -42,7 +42,7 @@ export default class GoogleOAuthStrategy extends PassportStrategy(
       name: { familyName: lastName, givenName: firstName },
     } = _profile;
 
-    const user: ValidatedUserProps = {
+    const user = {
       providerID,
       providerName,
       email,
