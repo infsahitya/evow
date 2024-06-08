@@ -1,5 +1,5 @@
 import { JwtService } from "@nestjs/jwt";
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import EmailSignupDTO from "./model/email-signup.dto";
 import UserService from "src/shared/user/user.service";
 import {
@@ -10,6 +10,8 @@ import EmailLoginDTO from "./model/email-login.dto";
 import { AuthTokens } from "src/constant/token.constant";
 import PrismaService from "src/global/prisma/prisma.service";
 import LoggerService from "src/global/logger/logger.service";
+import authConfig from "src/config/auth.config";
+import { ConfigType } from "@nestjs/config";
 
 @Injectable()
 export default class AuthService {
@@ -18,16 +20,28 @@ export default class AuthService {
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
     private readonly prismaService: PrismaService,
+    @Inject(authConfig.KEY)
+    private readonly authConfigService: ConfigType<typeof authConfig>,
   ) {}
 
   async emailSignup(data: EmailSignupDTO): Promise<EmailSignupValidatedProps> {
     const user = await this.userService.emailSignup(data);
-    const accessToken = await this.jwtService.signAsync({
-      sub: user.id,
-    });
-    const refreshToken = await this.jwtService.signAsync({
-      sub: user.id,
-    });
+    const accessToken = await this.jwtService.signAsync(
+      {
+        sub: user.id,
+      },
+      {
+        expiresIn: this.authConfigService.jwt.accessTokenExp,
+      },
+    );
+    const refreshToken = await this.jwtService.signAsync(
+      {
+        sub: user.id,
+      },
+      {
+        expiresIn: this.authConfigService.jwt.refreshTokenExp,
+      },
+    );
 
     try {
       const token = await this.prismaService.token.create({
@@ -55,12 +69,22 @@ export default class AuthService {
 
   async emailLogin(data: EmailLoginDTO): Promise<EmailLoginValidatedProps> {
     const user = await this.userService.emailLogin(data);
-    const accessToken = await this.jwtService.signAsync({
-      sub: user.id,
-    });
-    const refreshToken = await this.jwtService.signAsync({
-      sub: user.id,
-    });
+    const accessToken = await this.jwtService.signAsync(
+      {
+        sub: user.id,
+      },
+      {
+        expiresIn: this.authConfigService.jwt.accessTokenExp,
+      },
+    );
+    const refreshToken = await this.jwtService.signAsync(
+      {
+        sub: user.id,
+      },
+      {
+        expiresIn: this.authConfigService.jwt.refreshTokenExp,
+      },
+    );
 
     try {
       const token = await this.prismaService.token.update({
