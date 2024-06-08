@@ -2,21 +2,24 @@ import {
   Injectable,
   ForbiddenException,
   BadRequestException,
+  NotFoundException,
+  UnauthorizedException,
 } from "@nestjs/common";
 import * as bcrypt from "bcrypt";
+import { EmailSignupResponse } from "src/@types/auth";
+import EmailLoginDTO from "src/auth/model/email-login.dto";
 import EmailSignupDTO from "src/auth/model/email-signup.dto";
 import PrismaService from "src/global/prisma/prisma.service";
 import LoggerService from "src/global/logger/logger.service";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { EmailSignupResponse } from "src/@types/auth";
 
 @Injectable()
 export default class UserService {
   private hashSaltRounds: number;
 
   constructor(
-    private readonly prismaService: PrismaService,
     private readonly logger: LoggerService,
+    private readonly prismaService: PrismaService,
   ) {
     this.hashSaltRounds = 10;
   }
@@ -67,5 +70,38 @@ export default class UserService {
         cause: error,
       });
     }
+  }
+
+  async emailLogin(data: EmailLoginDTO) {
+    const contact = await this.prismaService.contact.findUnique({
+      where: {
+        email: data.email,
+      },
+      include: {
+        user: true,
+      },
+    });
+
+    if (!contact.user)
+      throw new NotFoundException(
+        "No account associated with the provided email.",
+      );
+
+    const isPasswordMatch = await bcrypt.compare(
+      data.password,
+      contact.user.password,
+    );
+
+    if (!isPasswordMatch) {
+      throw new UnauthorizedException("Incorrect password.");
+    }
+
+    delete contact.id;
+    delete contact.userID;
+    delete contact.updatedAt;
+    delete contact.createdAt;
+    delete contact.user.password;
+
+    return { ...contact };
   }
 }

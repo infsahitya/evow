@@ -26,3 +26,12 @@ interface EmailSignupValidatedProps extends EmailSignupResponse {
   [AuthTokens.ACCESS_TOKEN]: string;
   [AuthTokens.REFRESH_TOKEN]: string;
 }
+
+interface EmailLoginResposne
+  extends Omit<User, "password">,
+    Pick<Contact, "email"> {}
+
+interface EmailLoginValidatedProps extends EmailLoginResposne {
+  [AuthTokens.ACCESS_TOKEN]: string;
+  [AuthTokens.REFRESH_TOKEN]: string;
+}
