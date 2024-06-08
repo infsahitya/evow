@@ -1,11 +1,11 @@
-import AppModule from "./app.module";
-import { NestFactory } from "@nestjs/core";
-import * as cookieParser from "cookie-parser";
 import {
   ValidationPipe,
   VERSION_NEUTRAL,
   VersioningType,
 } from "@nestjs/common";
+import AppModule from "./app.module";
+import { NestFactory } from "@nestjs/core";
+import * as cookieParser from "cookie-parser";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
 async function bootstrap() {
@@ -28,10 +28,11 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle("Users")
-    .setDescription("The users API description")
+    .setTitle("Evow")
+    .setDescription(
+      "Evow is a realtime system for bringing out collaboration between large number of people for event management related activities.",
+    )
     .setVersion("1.0")
-    .addTag("users")
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("api", app, document);
