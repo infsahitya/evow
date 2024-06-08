@@ -73,35 +73,39 @@ export default class UserService {
   }
 
   async emailLogin(data: EmailLoginDTO) {
-    const contact = await this.prismaService.contact.findUnique({
-      where: {
-        email: data.email,
-      },
-      include: {
-        user: true,
-      },
-    });
+    try {
+      const contact = await this.prismaService.contact.findUnique({
+        where: {
+          email: data.email,
+        },
+        include: {
+          user: true,
+        },
+      });
 
-    if (!contact.user)
-      throw new NotFoundException(
-        "No account associated with the provided email.",
+      if (!contact.user)
+        throw new NotFoundException(
+          "No account associated with the provided email.",
+        );
+
+      const isPasswordMatch = await bcrypt.compare(
+        data.password,
+        contact.user.password,
       );
 
-    const isPasswordMatch = await bcrypt.compare(
-      data.password,
-      contact.user.password,
-    );
+      if (!isPasswordMatch) {
+        throw new UnauthorizedException("Incorrect password.");
+      }
 
-    if (!isPasswordMatch) {
-      throw new UnauthorizedException("Incorrect password.");
+      delete contact.id;
+      delete contact.userID;
+      delete contact.updatedAt;
+      delete contact.createdAt;
+      delete contact.user.password;
+
+      return { ...contact };
+    } catch (error) {
+      this.logger.error(error, ["Email Login Error"]);
     }
-
-    delete contact.id;
-    delete contact.userID;
-    delete contact.updatedAt;
-    delete contact.createdAt;
-    delete contact.user.password;
-
-    return { ...contact };
   }
 }
