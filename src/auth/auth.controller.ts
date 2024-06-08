@@ -19,6 +19,7 @@ import { AuthTokens } from "src/constant/token.constant";
 import LoggerService from "src/global/logger/logger.service";
 import EmailLoginDTO from "./model/email-login.dto";
 import EmailSignupDTO from "./model/email-signup.dto";
+import UserService from "src/shared/user/user.service";
 
 interface GoogleOAuthRedirectRequest extends Request {
   user: ValidatedUserProps;
@@ -32,6 +33,7 @@ export default class AuthController {
   private isProduction: boolean = false;
 
   constructor(
+    private readonly userService: UserService,
     private readonly loggerService: LoggerService,
     @Inject(envConfig.KEY)
     private readonly envConfigService: ConfigType<typeof envConfig>,
@@ -42,10 +44,14 @@ export default class AuthController {
   }
 
   @Get("login/email")
-  emailSignup(@Body() body: EmailSignupDTO) {}
+  emailLogin(@Body() body: EmailLoginDTO) {
+    return `Login using email ${body}`;
+  }
 
   @Get("signup/email")
-  emailLogin(@Body() body: EmailLoginDTO) {}
+  emailSignup(@Body() body: EmailSignupDTO) {
+    return this.userService.emailSignup(body);
+  }
 
   @Get("google-oauth20")
   @UseGuards(GoogleOAuthGuard)

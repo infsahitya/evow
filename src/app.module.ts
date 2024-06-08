@@ -1,6 +1,6 @@
 import dbConfig from "./config/db.config";
 import AuthModule from "./auth/auth.module";
-import UserModule from "./user/user.module";
+import UserModule from "./shared/user/user.module";
 import envConfig from "./config/env.config";
 import authConfig from "./config/auth.config";
 import { Inject, Module } from "@nestjs/common";
